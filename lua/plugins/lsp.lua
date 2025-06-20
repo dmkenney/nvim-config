@@ -139,20 +139,36 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        elixirls = {
+          setup = {
+            cmd = { "elixir-ls" },
+            capabilities = capabilities,
+          },
+        },
+        tailwindcss = {
+          init_options = {
+            userLanguages = {
+              elixir = "html-eex",
+              eelixir = "html-eex",
+              heex = "html-eex",
+            },
+          },
+        },
+        html = {
+          filetypes = { "html", "heex" },
+          on_attach = function(client, bufnr)
+            if vim.bo[bufnr].filetype == "heex" then
+              client.server_capabilities.documentFormattingProvider = false
+              client.server_capabilities.documentRangeFormattingProvider = false
+            end
+          end,
+        },
         jdtls = {
           autostart = false,
           setup = {
             jdtls = function()
               return true -- avoid duplicate servers
             end,
-          },
-        },
-        volar = {
-          filetypes = { "vue" },
-          init_options = {
-            vue = {
-              hybridMode = false,
-            },
           },
         },
         clangd = {},

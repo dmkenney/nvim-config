@@ -1,15 +1,14 @@
 return {
-  { dir = "~/Documents/neotest-gradle" },
   {
     "nvim-neotest/neotest",
-    dependencies = { "nvim-neotest/nvim-nio" },
+    dependencies = { "nvim-neotest/nvim-nio", "jfpedroza/neotest-elixir" },
     opts = {
       -- Can be a list of adapters like what neotest expects,
       -- or a list of adapter names,
       -- or a table of adapter names, mapped to adapter configs.
       -- The adapter will then be automatically loaded with the config.
       adapters = {
-        "neotest-gradle",
+        "neotest-elixir",
       },
       -- Example for loading neotest-golang with a custom config
       -- adapters = {

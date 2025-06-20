@@ -4,10 +4,12 @@ return {
     build = ":TSUpdate",
     opts = {
       ensure_installed = {
+        "elixir",
+        "eex",
+        "heex",
         "java",
         "javascript",
         "typescript",
-        "elixir",
         "bash",
         "c",
         "cpp",

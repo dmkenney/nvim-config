@@ -1,0 +1,15 @@
+{
+  "name": "personal-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "elixir",
+        "path": "./snippets/elixir.json"
+      },
+      {
+        "language": "eelixir",
+        "path": "./snippets/eelixir.json"
+      }
+    ]
+  }
+}

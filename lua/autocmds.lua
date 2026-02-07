@@ -28,7 +28,31 @@ autocmd("TextYankPost", {
   end,
 })
 
--- Go to last loc when opening a buffer
+-- Save view when leaving a buffer
+autocmd("BufLeave", {
+  group = augroup "SaveView",
+  callback = function(event)
+    if vim.bo[event.buf].buftype == "" then
+      vim.b[event.buf].saved_view = vim.fn.winsaveview()
+    end
+  end,
+})
+
+-- Restore view when entering a buffer
+autocmd("BufEnter", {
+  group = augroup "RestoreView",
+  callback = function(event)
+    local buf = event.buf
+    if vim.bo[buf].buftype ~= "" then
+      return
+    end
+    if vim.b[buf].saved_view then
+      vim.fn.winrestview(vim.b[buf].saved_view)
+    end
+  end,
+})
+
+-- Go to last loc when opening a buffer for the first time
 autocmd("BufReadPost", {
   group = augroup "LastLocation",
   callback = function(event)

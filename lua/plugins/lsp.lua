@@ -140,12 +140,6 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        elixirls = {
-          setup = {
-            cmd = { "elixir-ls" },
-            capabilities = capabilities,
-          },
-        },
         tailwindcss = {
           init_options = {
             userLanguages = {
@@ -206,6 +200,7 @@ return {
 
       require("mason-lspconfig").setup {
         handlers = {
+          expert = function() end, -- handled manually via lexical config below
           function(server_name)
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
@@ -220,6 +215,13 @@ return {
           end,
         },
       }
+
+      -- Expert LSP (Elixir) — installed via Mason but uses the lexical lspconfig entry
+      vim.lsp.config("lexical", {
+        cmd = { vim.fn.expand "~/.local/share/nvim/mason/bin/expert", "--stdio" },
+        capabilities = capabilities,
+      })
+      vim.lsp.enable "lexical"
     end,
   },
 

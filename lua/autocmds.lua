@@ -52,6 +52,18 @@ autocmd("BufEnter", {
   end,
 })
 
+-- Soft-wrap markdown at word boundaries so long lines stay readable
+autocmd("FileType", {
+  desc = "Wrap markdown at word boundaries",
+  group = augroup "MarkdownWrap",
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.breakindent = true
+  end,
+})
+
 -- Go to last loc when opening a buffer for the first time
 autocmd("BufReadPost", {
   group = augroup "LastLocation",

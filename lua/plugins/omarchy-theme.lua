@@ -25,6 +25,30 @@ local function read_theme()
   return theme.colorscheme and theme or fallback
 end
 
+-- Like omarchy-nvim: no editor background, so the terminal's (themed, slightly
+-- translucent) background shows through. Applied after every colorscheme.
+local transparent_groups = {
+  "Normal", "NormalFloat", "FloatBorder", "Pmenu", "Terminal", "EndOfBuffer",
+  "FoldColumn", "Folded", "SignColumn", "LineNr", "CursorLineNr", "NormalNC",
+  "WhichKeyFloat", "TelescopeBorder", "TelescopeNormal", "TelescopePromptBorder",
+  "TelescopePromptTitle", "NeoTreeNormal", "NeoTreeNormalNC", "NeoTreeVertSplit",
+  "NeoTreeWinSeparator", "NeoTreeEndOfBuffer", "NvimTreeNormal", "NvimTreeVertSplit",
+  "NvimTreeEndOfBuffer", "NotifyINFOBody", "NotifyERRORBody", "NotifyWARNBody",
+  "NotifyTRACEBody", "NotifyDEBUGBody", "NotifyINFOTitle", "NotifyERRORTitle",
+  "NotifyWARNTitle", "NotifyTRACETitle", "NotifyDEBUGTitle", "NotifyINFOBorder",
+  "NotifyERRORBorder", "NotifyWARNBorder", "NotifyTRACEBorder", "NotifyDEBUGBorder",
+}
+
+local function make_transparent()
+  for _, name in ipairs(transparent_groups) do
+    local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+    if ok then
+      hl.bg = nil
+      vim.api.nvim_set_hl(0, name, hl)
+    end
+  end
+end
+
 local function plugin_name(spec)
   return spec.name or spec[1]:match "[^/]+$"
 end
@@ -109,7 +133,10 @@ table.insert(specs, {
   priority = 900, -- after the colorscheme plugins (1000)
   config = function()
     vim.api.nvim_create_autocmd("ColorScheme", {
-      callback = function() vim.cmd.hi "Comment gui=none" end,
+      callback = function()
+        vim.cmd.hi "Comment gui=none"
+        make_transparent()
+      end,
     })
     apply(theme)
     watch()

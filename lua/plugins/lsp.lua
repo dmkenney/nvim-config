@@ -11,6 +11,9 @@ return {
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { "j-hui/fidget.nvim", opts = {} },
+
+      -- JSON and YAML schemas from schemastore.org for jsonls and yamlls
+      "b0o/SchemaStore.nvim",
     },
     config = function()
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -137,6 +140,24 @@ return {
           end,
         },
         expert = {},
+        bashls = {},
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require("schemastore").json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+        yamlls = {
+          settings = {
+            yaml = {
+              -- Use SchemaStore.nvim's schemas instead of yamlls's built-in store
+              schemaStore = { enable = false, url = "" },
+              schemas = require("schemastore").yaml.schemas(),
+            },
+          },
+        },
         clangd = {},
         zls = {},
         rust_analyzer = {},
@@ -165,6 +186,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         "stylua", -- Used to format Lua code
+        "shellcheck", -- Used by bashls for shell script diagnostics
       })
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 

@@ -14,14 +14,6 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       {
-        "williamboman/mason.nvim",
-        opts = function(_, opts)
-          opts.ensure_installed = { "java-debug-adapter" }
-          -- opts.ensure_installed = opts.ensure_installed or {}
-          -- vim.list_extend(opts.ensure_installed, { "java-test", "java-debug-adapter" })
-        end,
-      },
-      {
         "rcarriga/nvim-dap-ui",
         -- virtual text for the debugger
         {
@@ -53,19 +45,6 @@ return {
 
       { "<leader>td", function() require("neotest").run.run { strategy = "dap" } end, desc = "Debug Nearest" },
     },
-    config = function()
-      local dap = require "dap"
-
-      dap.configurations.java = {
-        {
-          type = "java",
-          request = "attach",
-          name = "Run in Debug Mode",
-          port = 5005,
-          hostName = "127.0.0.1",
-        },
-      }
-    end,
   },
 
   -- fancy UI for the debugger

@@ -5,7 +5,6 @@ local ensure_installed = {
   "elixir",
   "eex",
   "heex",
-  "java",
   "javascript",
   "typescript",
   "bash",

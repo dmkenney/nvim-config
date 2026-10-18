@@ -24,7 +24,7 @@ autocmd("TextYankPost", {
   desc = "Highlight when yanking text",
   group = augroup "HighlightYank",
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 

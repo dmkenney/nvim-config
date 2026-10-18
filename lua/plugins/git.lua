@@ -89,7 +89,6 @@ return {
         map("n", "<leader>gs", gitsigns.stage_hunk, { desc = "Git stage hunk" })
         map("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Git reset hunk" })
         map("n", "<leader>gS", gitsigns.stage_buffer, { desc = "Git Stage buffer" })
-        map("n", "<leader>gu", gitsigns.undo_stage_hunk, { desc = "Git undo stage hunk" })
         map("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Git Reset buffer" })
         map("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Git preview hunk" })
         map("n", "<leader>gb", gitsigns.blame_line, { desc = "Git blame line" })

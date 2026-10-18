@@ -55,6 +55,9 @@ vim.opt.scrolloff = 5
 
 vim.opt.colorcolumn = "120"
 
+-- Show diagnostic messages at the end of the line (off by default since Neovim 0.11)
+vim.diagnostic.config { virtual_text = true }
+
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 vim.opt.smoothscroll = true

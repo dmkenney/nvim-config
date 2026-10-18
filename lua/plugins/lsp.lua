@@ -4,8 +4,8 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
-      { "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
-      "williamboman/mason-lspconfig.nvim",
+      { "mason-org/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
+      "mason-org/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
 
       -- Useful status updates for LSP.
@@ -31,7 +31,7 @@ return {
           map("gd", require("telescope.builtin").lsp_definitions, "Goto Definition")
 
           -- Find references for the word under your cursor.
-          map("gr", require("telescope.builtin").lsp_references, "Goto References")
+          map("grr", require("telescope.builtin").lsp_references, "Goto References")
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
@@ -57,10 +57,6 @@ return {
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
-
-          -- Opens a popup that displays documentation about the word under your cursor
-          --  See `:help K` for why this keymap.
-          map("K", vim.lsp.buf.hover, "Hover Documentation")
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -109,8 +105,7 @@ return {
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+      --  blink.cmp adds more, so we create new capabilities with it and broadcast them to the servers.
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
       -- Enable the following language servers
@@ -141,6 +136,7 @@ return {
             end
           end,
         },
+        expert = {},
         clangd = {},
         zls = {},
         rust_analyzer = {},
@@ -172,27 +168,17 @@ return {
       })
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
+      vim.lsp.config("*", { capabilities = capabilities })
       for server_name, server in pairs(servers) do
-        -- This handles overriding only values explicitly passed
-        -- by the server configuration above. Useful when disabling
-        -- certain features of an LSP (for example, turning off formatting for tsserver)
-        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
         vim.lsp.config(server_name, server)
       end
 
       -- Enables every Mason-installed server with vim.lsp.enable
       require("mason-lspconfig").setup {
         automatic_enable = {
-          exclude = { "expert" }, -- handled manually via lexical config below
+          exclude = { "stylua" }, -- stylua is only used as a formatter through conform
         },
       }
-
-      -- Expert LSP (Elixir) — installed via Mason but uses the lexical lspconfig entry
-      vim.lsp.config("lexical", {
-        cmd = { vim.fn.expand "~/.local/share/nvim/mason/bin/expert", "--stdio" },
-        capabilities = capabilities,
-      })
-      vim.lsp.enable "lexical"
     end,
   },
 }
